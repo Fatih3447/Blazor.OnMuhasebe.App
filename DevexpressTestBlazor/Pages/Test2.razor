@@ -1,0 +1,14 @@
+﻿@page "/test2"
+
+<h3>Test2</h3>
+
+@inject NavigationManager NavigationManager
+@inject TransientService TransientService
+@inject ScopedService ScopedService
+@inject SingletonService SingletonService
+
+<label>Transient</label><DxSpinEdit @bind-Value="TransientService.TransientCount"/>
+<label>Scoped</label><DxSpinEdit @bind-Value="ScopedService.ScopedCount"/>
+<label>Singleton</label><DxSpinEdit @bind-Value="SingletonService.SingletonCount"/>
+
+<DxButton Click=@(()=>NavigationManager.NavigateTo("/"))>Ana Sayfa</DxButton>

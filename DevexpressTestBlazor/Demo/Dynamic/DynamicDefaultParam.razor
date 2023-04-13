@@ -1,0 +1,11 @@
+﻿<h3>Bu DynamicDefaultParam Componentidir</h3>
+<br />
+<h3>Gönderilen Sayi Değeri:@Sayi </h3>
+<h3>Gönderilen Name Değeri:@Name </h3>
+<h3>Gönderilen Surname Değeri:@Surname </h3>
+
+@code {
+    [Parameter] public int Sayi { get; set; }
+    [Parameter] public string? Name { get; set; }
+    [Parameter] public string? Surname { get; set; }
+}

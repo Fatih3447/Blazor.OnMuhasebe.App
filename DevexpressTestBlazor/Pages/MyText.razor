@@ -1,0 +1,14 @@
+﻿
+<div>
+    @Caption?.Length
+</div>
+
+<DxTextBox />
+<DxButton Text="Tıkla"/>
+
+
+@code {
+
+    [Parameter]
+    public string? Caption { get; set; }
+}

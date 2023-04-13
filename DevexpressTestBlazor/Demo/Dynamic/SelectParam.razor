@@ -1,0 +1,13 @@
+﻿@page "/dynamicparam"
+
+<DynamicComponent Type=typeof(DynamicDefaultParam) Parameters=parameters />
+
+@code {
+
+    Dictionary<string, object> parameters = new Dictionary<string, object>()
+    {
+        {"Sayi", 100 },
+        {"Name", "Hasan" },
+        {"Surname", "Yılmaz" }
+    };
+}

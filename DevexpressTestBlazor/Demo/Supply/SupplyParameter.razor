@@ -1,0 +1,21 @@
+﻿@page "/supplyparam"  
+
+<h3>Ad : @Name</h3>
+<h3>Soyad : @Surname</h3>
+<h3>Yaş : @Age</h3>
+
+@code {
+    ///supplyparam?ad=Hasan&soyad=Yılmaz&yas=40
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "ad")]
+    public string Name { get; set; }
+ 
+    [Parameter]
+    [SupplyParameterFromQuery(Name ="soyad")]
+    public string Surname { get; set; }
+ 
+    [Parameter]
+    [SupplyParameterFromQuery(Name ="yas")]
+    public int Age { get; set; }
+
+}

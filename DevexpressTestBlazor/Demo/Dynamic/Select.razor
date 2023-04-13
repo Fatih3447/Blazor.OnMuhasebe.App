@@ -1,0 +1,22 @@
+﻿@page "/dynamic"
+
+<div class="col-4">
+    
+    <select @onchange="OnDropdownChange" class="form-control">
+        <option value="@nameof(DynamicDefault)">Bir Component Seçin</option>
+        <option value="@nameof(DynamicA)">Dynamic-A Componenti</option>
+        <option value="@nameof(DynamicB)">Dynamic-B Componenti</option>        
+    </select>
+</div>
+
+<DynamicComponent Type="selectedType" />
+
+@code {
+
+    Type selectedType = typeof(DynamicDefault);
+
+    public void OnDropdownChange(ChangeEventArgs args)
+    {
+        selectedType = Type.GetType($"DevexpressTestBlazor.Demo.Dynamic.{args.Value}");
+    }
+}

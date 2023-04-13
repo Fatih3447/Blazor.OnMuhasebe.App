@@ -1,0 +1,368 @@
+﻿@page "/"
+
+@inject AppService AppService
+@inject IStringLocalizer<OnMuhasebeResource> L
+@inject ICurrentUser CurrentUser
+@inject FirmaParametreAppService FirmaParametreAppService
+@inject FinansalDurumAppService FinansalDurumAppService
+
+<AuthorizeView>
+    <Authorized>
+        @if (_isShowFirmaParametre)
+        {
+            <SubeDonemSecimEditPage />
+        }
+        else
+        {
+            AppService.HasChanged();
+        }
+
+        <h4 class="pt-4 pb-4" style="text-align:center;font-weight:bold;font-family:Roboto Condensed, Arial, Helvetica, sans-serif">@L["FinancialStatusSummary"]</h4>
+        <DevGridLayout ColumnCount="5"
+                       ColumnWidths="@ColumnWidths("*","10px","*","10px","*")"
+                       RowCount="3"
+                       RowHeights="@RowHeights("*","10px","*")">
+            <GridLayoutItems>
+                <DxGridLayoutItem Column="0"
+                                  Row="0">
+                    <Template>
+                        <div class="card">
+                            <DxChart Data="KasaDurum">
+                                <DxChartTitle Text="@L["CashStatusChart"]" />
+                                <DxChartLegend HorizontalAlignment="HorizontalAlignment.Right"
+                                               Orientation="DevExpress.Blazor.Orientation.Vertical"
+                                               Position="RelativePosition.Outside"
+                                               VerticalAlignment="VerticalEdge.Top" />
+                                <DxChartPieSeries ArgumentField="@(x => x.Aciklama)"
+                                                  ValueField="@((FinansalDurumDto x)=> x.Tutar)">
+                                    <DxChartSeriesLabel Format="ChartElementFormat.Decimal(2)"
+                                                        Visible="true" />
+                                </DxChartPieSeries>
+                            </DxChart>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+                <DxGridLayoutItem Column="2"
+                                  Row="0">
+                    <Template>
+                        <div class="card">
+                            <DxChart Data="BankaDurum">
+                                <DxChartTitle Text="@L["BankStatusChart"]" />
+                                <DxChartLegend HorizontalAlignment="HorizontalAlignment.Right"
+                                               Orientation="DevExpress.Blazor.Orientation.Vertical"
+                                               Position="RelativePosition.Outside"
+                                               VerticalAlignment="VerticalEdge.Top" />
+                                <DxChartPieSeries ArgumentField="@(x => x.Aciklama)"
+                                                  ValueField="@((FinansalDurumDto x)=> x.Tutar)">
+                                    <DxChartSeriesLabel Format="ChartElementFormat.Decimal(2)"
+                                                        Visible="true" />
+                                </DxChartPieSeries>
+                            </DxChart>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+                <DxGridLayoutItem Column="4"
+                                  Row="0">
+                    <Template>
+                        <div class="card">
+                            <DxChart Data="OdemeBelgeleriDagilim">
+                                <DxChartTitle Text="@L["PaymentTypesDistributionChart"]" />
+                                <DxChartLegend HorizontalAlignment="HorizontalAlignment.Right"
+                                               Orientation="DevExpress.Blazor.Orientation.Vertical"
+                                               Position="RelativePosition.Outside"
+                                               VerticalAlignment="VerticalEdge.Top" />
+                                <DxChartPieSeries ArgumentField="@(x => x.Aciklama)"
+                                                  ValueField="@((FinansalDurumDto x)=> x.Tutar)">
+                                    <DxChartSeriesLabel Format="ChartElementFormat.Decimal(2)"
+                                                        Visible="true" />
+                                </DxChartPieSeries>
+                            </DxChart>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+                <DxGridLayoutItem Column="0"
+                                  Row="2">
+                    <Template>
+                        <div class="card">
+                            <DevPageHeader Caption="@L["LastTenTransactionsTradedInTheCashier"]"
+                                           CssClass="bg-danger text-white"
+                                           TextAlign="Center" />
+                            <DxDataGrid @ref="KasaGrid"
+                                        AllowSort="false"
+                                        AllowColumnDragDrop="false"
+                                        Data="KasaSonOnHareket"
+                                        DataNavigationMode="DataGridNavigationMode.ShowAllDataRows"
+                                        HorizontalScrollBarMode="ScrollBarMode.Visible"
+                                        VerticalScrollableHeight="295">
+                                <Column>
+                                    <DxDataGridDateEditColumn Caption="@L["Date"]"
+                                                              DisplayFormat="@L["DateFormat"]"
+                                                              Field="@nameof(FinansalHareketDto.Tarih)"
+                                                              TextAlignment="DataGridTextAlign.Center"
+                                                              Width="80px" />
+
+                                    <DxDataGridColumn Caption="@L["ReceiptNo"]"
+                                                      Field="@nameof(FinansalHareketDto.MakbuzNo)"
+                                                      Width="130px" />
+
+                                    <DxDataGridSpinEditColumn Caption="@L["Entered"]"
+                                                              DisplayFormat="n2"
+                                                              Field="@nameof(FinansalHareketDto.Borc)"
+                                                              Width="100px" />
+
+                                    <DxDataGridSpinEditColumn Caption="@L["Out"]"
+                                                              DisplayFormat="n2"
+                                                              Field="@nameof(FinansalHareketDto.Alacak)"
+                                                              Width="100px" />
+
+                                    <DxDataGridColumn Caption="@L["Description"]"
+                                                      Field="@nameof(FinansalHareketDto.Aciklama)"
+                                                      Width="300px" />
+                                </Column>
+                            </DxDataGrid>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+                <DxGridLayoutItem Column="2"
+                                  Row="2">
+                    <Template>
+                        <div class="card">
+                            <DevPageHeader Caption="@L["LastTenTransactionsTradedInTheBank"]"
+                                           CssClass="bg-danger text-white"
+                                           TextAlign="Center" />
+                            <DxDataGrid @ref="BankaGrid"
+                                        AllowSort="false"
+                                        AllowColumnDragDrop="false"
+                                        Data="BankaSonOnHareket"
+                                        DataNavigationMode="DataGridNavigationMode.ShowAllDataRows"
+                                        HorizontalScrollBarMode="ScrollBarMode.Visible"
+                                        VerticalScrollableHeight="295">
+                                <Column>
+                                    <DxDataGridDateEditColumn Caption="@L["Date"]"
+                                                              DisplayFormat="@L["DateFormat"]"
+                                                              Field="@nameof(FinansalHareketDto.Tarih)"
+                                                              TextAlignment="DataGridTextAlign.Center"
+                                                              Width="80px" />
+
+                                    <DxDataGridColumn Caption="@L["ReceiptNo"]"
+                                                      Field="@nameof(FinansalHareketDto.MakbuzNo)"
+                                                      Width="130px" />
+
+                                    <DxDataGridSpinEditColumn Caption="@L["Entered"]"
+                                                              DisplayFormat="n2"
+                                                              Field="@nameof(FinansalHareketDto.Borc)"
+                                                              Width="100px" />
+
+                                    <DxDataGridSpinEditColumn Caption="@L["Out"]"
+                                                              DisplayFormat="n2"
+                                                              Field="@nameof(FinansalHareketDto.Alacak)"
+                                                              Width="100px" />
+
+                                    <DxDataGridColumn Caption="@L["Description"]"
+                                                      Field="@nameof(FinansalHareketDto.Aciklama)"
+                                                      Width="300px" />
+                                </Column>
+                            </DxDataGrid>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+                <DxGridLayoutItem Column="4"
+                                  Row="2">
+                    <Template>
+                        <div class="card">
+                            <DevPageHeader Caption="@L["OverdueReceivables"]"
+                                           CssClass="bg-danger text-white"
+                                           TextAlign="Center" />
+                            <DxDataGrid @ref="GecikenAlacaklarGrid"
+                                        AllowSort="false"
+                                        AllowColumnDragDrop="false"
+                                        Data="GecikenAlacaklar"
+                                        DataNavigationMode="DataGridNavigationMode.ShowAllDataRows"
+                                        HorizontalScrollBarMode="ScrollBarMode.Visible"
+                                        VerticalScrollableHeight="295">
+                                <Column>
+                                    <DxDataGridColumn Caption="@L["PaymentType"]"
+                                                      Field="@nameof(OdemeBelgesiDto.OdemeTuruAdi)"
+                                                      Width="110px" />
+
+                                    <DxDataGridDateEditColumn Caption="@L["ExpiryDate"]"
+                                                              DisplayFormat="@L["DateFormat"]"
+                                                              Field="@nameof(OdemeBelgesiDto.Vade)"
+                                                              TextAlignment="DataGridTextAlign.Center"
+                                                              Width="80px" />
+
+                                    <DxDataGridSpinEditColumn Caption="@L["Amount"]"
+                                                              DisplayFormat="n2"
+                                                              Field="@nameof(OdemeBelgesiDto.Tutar)"
+                                                              Width="100px" />
+
+                                    <DxDataGridColumn Caption="@L["Description"]"
+                                                      Field="@nameof(FinansalHareketDto.Aciklama)"
+                                                      Width="300px" />
+                                </Column>
+                            </DxDataGrid>
+                        </div>
+                    </Template>
+                </DxGridLayoutItem>
+
+            </GridLayoutItems>
+        </DevGridLayout>
+    </Authorized>
+
+    <NotAuthorized>
+        <div id="container">
+            <div class="text">
+                <h4>@L["IndexPage_1"]</h4>
+                <h4>@L["IndexPage_2"]</h4>
+                <h6 class="pt-2">@L["IndexPage_3"]</h6>
+
+                <a class="btn btn-primary" href="/account/login">
+                    <i class="fa fa-sign-in-alt pr-2"></i> @L["Login"]
+                </a>
+
+                <div class="card mt-4 mb-5">
+                    <div class="card-body">
+                        <div class="row text-center justify-content-md-center">
+                            <div class="col-lg-4">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fa fa-clone text-secondary d-block my-3 fa-2x"></i>@L["Cards"]</h5>
+                                    <p>@L["IndexPage_4"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 border-left">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fas fa-file-invoice text-secondary d-block my-3 fa-2x"></i> @L["Invoices"]</h5>
+                                    <p>@L["IndexPage_5"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 border-left">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fas fa-receipt text-secondary d-block my-3 fa-2x"></i> @L["Receipts"]</h5>
+                                    <p>@L["IndexPage_6"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center mt-lg-3 justify-content-md-center">
+                            <div class="col-lg-4">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fa fa-money-check text-secondary d-block my-3 fa-2x"></i>@L["PaymentTypes"]</h5>
+                                    <p>@L["IndexPage_7"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 border-left">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fas fa-poll text-secondary d-block my-3 fa-2x"></i>@L["Reports"]</h5>
+                                    <p>@L["IndexPage_8"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 border-left">
+                                <div class="p-4">
+                                    <h5 class="mb-3"><i class="fas fa-wrench text-secondary d-block my-3 fa-2x"></i>@L["Authorization"]</h5>
+                                    <p>@L["IndexPage_9"]</p>
+                                    <a href="/account/login" class="btn btn-link px-1">@L["MoreInformation"] <i class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    private DxDataGrid<FinansalHareketDto> KasaGrid;
+    private DxDataGrid<FinansalHareketDto> BankaGrid;
+    private DxDataGrid<OdemeBelgesiDto> GecikenAlacaklarGrid;
+
+    private IList<FinansalHareketDto> KasaSonOnHareket;
+    private IList<FinansalHareketDto> BankaSonOnHareket;
+    private IList<OdemeBelgesiDto> GecikenAlacaklar;
+
+    private IList<FinansalDurumDto> KasaDurum;
+    private IList<FinansalDurumDto> BankaDurum;
+    private IList<FinansalDurumDto> OdemeBelgeleriDagilim;
+
+    private bool _isShowFirmaParametre;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CurrentUser.Id == null) return;
+
+        if (AppService.FirmaParametre.Id == Guid.Empty)
+        {
+            var firmaParametre = await FirmaParametreAppService.GetAsync(CurrentUser.Id.Value);
+
+            if (firmaParametre != null)
+            {
+                AppService.FirmaParametre = firmaParametre;
+                await Reports();
+            }
+            else
+                _isShowFirmaParametre = true;
+        }
+        else
+            await Reports();
+    }
+
+    private async Task Reports()
+    {
+        KasaSonOnHareket = await FinansalDurumAppService.KasaSonOnHareketListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        BankaSonOnHareket = await FinansalDurumAppService.BankaSonOnHareketListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        KasaDurum = await FinansalDurumAppService.KasaDurumListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        BankaDurum = await FinansalDurumAppService.BankaDurumListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        OdemeBelgeleriDagilim = await FinansalDurumAppService.OdemeBelgeleriDagilimListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        GecikenAlacaklar = await FinansalDurumAppService.GecikenAlacaklarListAsync(
+            new MakbuzHareketListParameterDto
+                {
+                    SubeId = AppService.FirmaParametre.SubeId,
+                    DonemId = AppService.FirmaParametre.DonemId
+                });
+
+        KasaGrid.SetDataRowSelected(KasaSonOnHareket.FirstOrDefault(), true);
+        BankaGrid.SetDataRowSelected(BankaSonOnHareket.FirstOrDefault(), true);
+        GecikenAlacaklarGrid.SetDataRowSelected(GecikenAlacaklar.FirstOrDefault(), true);
+    }
+}

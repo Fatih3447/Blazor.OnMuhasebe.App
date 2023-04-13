@@ -1,0 +1,27 @@
+﻿@page "/js3"
+@inject IJSRuntime JSRuntime
+
+<p>
+    Sonuç: @_result
+</p>
+
+<p>
+    <input type="number" @bind=Age />
+</p>
+
+<p>
+    <button @onclick="GetAge">Yaş getir</button>
+</p>
+
+@code {
+
+    private string? _result;
+
+    [Parameter] public int? Age { get; set; }
+
+    private async Task GetAge()
+    {
+       _result = await JSRuntime.InvokeAsync<string>("getAge", Age);
+    }
+
+}

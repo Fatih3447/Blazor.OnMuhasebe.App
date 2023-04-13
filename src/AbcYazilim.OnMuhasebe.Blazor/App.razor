@@ -1,0 +1,30 @@
+﻿@inject IOptions<AbpRouterOptions> RouterOptions
+@inject IStringLocalizer<OnMuhasebeResource> L
+@inject NavigationManager NavigationManager
+
+<CircleLoading1 Caption="@L["PleaseWait"]" Text="@L["Loading"]">    
+    <CascadingAuthenticationState>
+        <Router AppAssembly="RouterOptions.Value.AppAssembly"
+                AdditionalAssemblies="RouterOptions.Value.AdditionalAssemblies">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        @if (!context.User.Identity.IsAuthenticated)
+                        {
+                            NavigationManager.NavigateTo($"account/login?returnUrl={ Uri.EscapeDataString(NavigationManager.Uri) }", true);
+                        }
+                        else
+                        {
+                            <p>@L["NotAuthorized"]</p>
+                        }
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            </Found>
+            <NotFound>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p>@L["NothingAddress"]</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>    
+</CircleLoading1>

@@ -1,0 +1,17 @@
+﻿@page "/js"
+
+@inject IJSRuntime JSRuntime
+
+<p>
+    <button @onclick=ButtonClicked>Tıkla</button>
+</p>
+
+@code {
+
+    private async Task ButtonClicked()
+    {
+        //await JSRuntime.InvokeVoidAsync("alert", "Merhaba Blazor!!");
+        await JSRuntime.InvokeVoidAsync("setLocalStorage", "name", "Blazor");
+    }
+
+}

@@ -1,0 +1,29 @@
+﻿@page "/js2"
+
+@inject IJSRuntime JSRuntime
+
+<p>
+    Sonuç: @_result
+</p>
+<p>
+    <button @onclick=ShowConfirm>Onal Al</button>
+</p>
+<p>
+    <button @onclick=ShowPrompt>Değer Gir</button>
+</p>
+@code {
+
+    private string? _result;
+
+    private async Task ShowConfirm()
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Onaylıyor musunuz?");
+        _result = confirmed ? "OK tuşuna basıldı." : "Cancel tuşuna basıldı.";
+    }
+
+    private async Task ShowPrompt()
+    {
+        string teknoloji = await JSRuntime.InvokeAsync<string>("prompt", "Hangi teknolojiyi kullanıyorsunuz?");
+        _result = "Kullandığınız Teknoloji : " + (teknoloji == "" ? "Cevap verilmedi" : teknoloji == null ? "Vazgeçildi" : teknoloji);
+    }
+}

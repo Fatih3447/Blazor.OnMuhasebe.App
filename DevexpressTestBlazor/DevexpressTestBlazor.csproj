@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\js\component.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor" Version="22.1.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\AbcYazilim.Blazor.Core\AbcYazilim.Blazor.Core.csproj" />
+  </ItemGroup>
+</Project>

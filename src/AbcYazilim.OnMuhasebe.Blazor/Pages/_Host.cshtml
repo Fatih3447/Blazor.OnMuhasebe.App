@@ -1,0 +1,50 @@
+﻿@page "/"
+
+@inject IStringLocalizer<OnMuhasebeResource> L
+
+@using System.Globalization
+@using AbcYazilim.OnMuhasebe.Blazor
+@using AbcYazilim.OnMuhasebe.Localization
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
+@using Volo.Abp.Localization
+
+@{
+    Layout = null;
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
+}
+
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@($"Abc {L["Software"]} {L["Pre-Accounting"]}")</title>
+    <base href="~/" />
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
+</head>
+<body class="abp-application-layout @rtl">
+
+    <environment include="Staging,Production">
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </environment>
+    <environment include="Development">
+        <component type="typeof(App)" render-mode="Server" />
+    </environment>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
+</body>
+</html>

@@ -1,0 +1,15 @@
+﻿
+<h3>Child Component</h3>
+
+<p>Adi : @Adi</p>
+<p>Soyadi : @Soyadi</p>
+
+@code {
+
+    [CascadingParameter(Name = "Adi")]
+    public string? Adi { get; set; }
+
+    [CascadingParameter(Name = "Soyadi")]
+    public string? Soyadi { get; set; }
+
+}

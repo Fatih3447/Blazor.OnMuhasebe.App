@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>AbcYazilim.OnMuhasebe-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazorise.Bootstrap5" Version="0.9.5.4" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.5.4" />
+    <PackageReference Include="DevExpress.Blazor" Version="21.2.5" />
+    <PackageReference Include="DevExpress.Blazor.Reporting" Version="21.2.5" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.1-dev-00241" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AbcYazilim.Blazor.Core\AbcYazilim.Blazor.Core.csproj" />
+    <ProjectReference Include="..\AbcYazilim.OnMuhasebe.Application\AbcYazilim.OnMuhasebe.Application.csproj" />
+    <ProjectReference Include="..\AbcYazilim.OnMuhasebe.HttpApi\AbcYazilim.OnMuhasebe.HttpApi.csproj" />
+    <ProjectReference Include="..\AbcYazilim.OnMuhasebe.EntityFrameworkCore\AbcYazilim.OnMuhasebe.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Server.BasicTheme" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Identity.Blazor.Server" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Blazor.Server" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Blazor.Server" Version="5.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Reports\Faturalar\Fatura.vsrepx" />
+    <None Remove="Reports\Makbuzlar\TahsilatMakbuzlari\Tahsilat Makbuzu.vsrepx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Faturalar\Fatura.vsrepx" />
+    <EmbeddedResource Include="Reports\Makbuzlar\TahsilatMakbuzlari\Tahsilat Makbuzu.vsrepx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Reports\Faturalar\Fatura.cs">
+      <DependentUpon>Fatura.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Faturalar\Fatura.Designer.cs">
+      <DependentUpon>Fatura.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Makbuzlar\TahsilatMakbuzlari\Tahsilat Makbuzu.cs">
+      <DependentUpon>Tahsilat Makbuzu.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Makbuzlar\TahsilatMakbuzlari\Tahsilat Makbuzu.Designer.cs">
+      <DependentUpon>Tahsilat Makbuzu.vsrepx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

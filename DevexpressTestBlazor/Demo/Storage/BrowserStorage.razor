@@ -1,0 +1,55 @@
+﻿@page "/storage"
+
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage LocalStorage
+@inject ProtectedSessionStorage SessionStorage
+
+<p>
+    <input class="form-control" @bind="name" />
+</p>
+
+<p>
+    <label>Local Storage</label>
+    <button class="btn btn-primary" @onclick="()=>KaydetAsync()">Kaydet</button>
+    <button class="btn btn-primary" @onclick="()=>OkuAsync()">Oku</button>
+    <button class="btn btn-primary" @onclick="()=>SilAsync()">Sil</button>
+</p>
+
+<p>
+    <label>Session Storage</label>
+    <button class="btn btn-primary" @onclick="()=>KaydetAsync(false)">Kaydet</button>
+    <button class="btn btn-primary" @onclick="()=>OkuAsync(false)">Oku</button>
+    <button class="btn btn-primary" @onclick="()=>SilAsync(false)">Sil</button>
+</p>
+@code {
+
+    string name;
+
+    public async Task KaydetAsync(bool local = true)
+    {
+        if (local)
+            await LocalStorage.SetAsync("name", name);
+        else
+            await SessionStorage.SetAsync("name", name);
+    }
+
+    public async Task OkuAsync(bool local=true)
+    {
+        ProtectedBrowserStorageResult<string> result;
+
+        if (local)
+            result = await LocalStorage.GetAsync<string>("name");
+        else
+            result = await SessionStorage.GetAsync<string>("name");
+
+        name = result.Success ? result.Value : "";
+    }
+
+    public async Task SilAsync(bool local=true)
+    {
+        if (local)
+            await LocalStorage.DeleteAsync("name");
+        else
+            await SessionStorage.DeleteAsync("name");
+    }
+}

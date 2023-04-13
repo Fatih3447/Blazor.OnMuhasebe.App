@@ -1,0 +1,21 @@
+﻿@page "/pagetitle"
+
+<p>
+    <button @onclick=ButtonClicked>Tıkla</button>
+</p>
+
+<PageTitle>Sayı : @sayi</PageTitle>
+
+<HeadContent>
+    <meta name="aciklama" content="@aciklama">
+</HeadContent>
+
+@code {
+    private int sayi = 0;
+    private string aciklama = "Bu içeriği ben ekledim";
+
+    private void ButtonClicked()
+    {
+        sayi++;
+    }
+}

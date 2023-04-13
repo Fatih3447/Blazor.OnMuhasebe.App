@@ -1,0 +1,13 @@
+﻿@page "/cascading"
+
+<CascadingValue Name="Adi" Value="@Adi">
+    <CascadingValue Name="Soyadi" Value="@Soyadi">
+        <ChildComponent/>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [Parameter] public string? Adi { get; set; } = "Hasan";
+    [Parameter] public string? Soyadi { get; set; } = "Yılmaz";
+
+}
